@@ -81,7 +81,12 @@ const {
 
     <!-- Turnstile Widget -->
     <div class="pt-2">
-      <div id="turnstile-widget" class="cf-turnstile" data-sitekey="0x4AAAAAADYjr8h--vYRDUCx"></div>
+      <div 
+        class="cf-turnstile" 
+        data-sitekey="0x4AAAAAADYjr8h--vYRDUCx"
+        data-callback="onTurnstileSuccess"
+        data-expired-callback="onTurnstileExpired"
+      ></div>
       <!-- TODO: Replace with your real Cloudflare Turnstile site key -->
     </div>
 
@@ -139,24 +144,35 @@ const {
 
     let turnstileToken = '';
 
-    // Load Turnstile
-    loadTurnstile().then(() => {
-      const observer = new MutationObserver(() => {
-        const widget = document.querySelector('.cf-turnstile iframe');
-        if (widget && submitBtn) {
-          submitBtn.disabled = false;
-          observer.disconnect();
-        }
-      });
-      observer.observe(form, { childList: true, subtree: true });
-    });
-
-    // Global callback for Turnstile (if using explicit mode later)
+    // Proper Turnstile callbacks (wired via data-callback on the widget)
     // @ts-ignore
-    window.onloadTurnstileCallback = function (token) {
+    window.onTurnstileSuccess = function (token) {
       turnstileToken = token;
-      if (submitBtn) submitBtn.disabled = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+      }
     };
+
+    // @ts-ignore
+    window.onTurnstileExpired = function () {
+      turnstileToken = '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+    };
+
+    // Fallback: also try to enable button if Turnstile script loads
+    // (in case the widget renders before callbacks are attached)
+    loadTurnstile().then(() => {
+      // Give Turnstile a moment to render
+      setTimeout(() => {
+        const responseInput = document.querySelector('[name="cf-turnstile-response"]');
+        if (responseInput && responseInput.value && submitBtn) {
+          submitBtn.disabled = false;
+          turnstileToken = responseInput.value;
+        }
+      }, 800);
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -207,6 +223,8 @@ const {
         if (res.ok) {
           successEl?.classList.remove('hidden');
           form.reset();
+          turnstileToken = '';
+          if (submitBtn) submitBtn.disabled = true;
           // @ts-ignore
           if (window.turnstile) window.turnstile.reset();
         } else {
