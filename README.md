@@ -1,6 +1,6 @@
 # Solid Properties — Astro + Cloudflare Pages
 
-Modern, maintainable rebuild of the Solid Properties & Investments LLC website (Webflow → Astro).
+Modern, maintainable rebuild of the Solid Properties & Investments website (Webflow → Astro).
 
 **Live conversion goals achieved:**
 - Pixel-perfect modernized design using the original brand colors, typography, and messaging

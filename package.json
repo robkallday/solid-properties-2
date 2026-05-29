@@ -20,7 +20,7 @@
     "tailwindcss": "^4.3.0",
     "wrangler": "^4.95.0"
   },
-  "description": "Solid Properties & Investments LLC — Cash home buyers in San Diego. Built with Astro.",
+  "description": "Solid Properties & Investments — Cash home buyers in San Diego. Built with Astro.",
   "overrides": {
     "vite": "^7"
   }

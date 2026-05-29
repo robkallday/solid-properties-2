@@ -8,18 +8,18 @@ export async function onRequestPost(context) {
 
   try {
     const body = await request.json();
-    const { address, email, phone, turnstileToken, source, page } = body;
+    const { address, email, phone, message, turnstileToken, source, page } = body;
 
     // Basic validation
-    if (!address || !email) {
-      return new Response(JSON.stringify({ message: 'Address and email are required' }), {
+    if (!email) {
+      return new Response(JSON.stringify({ message: 'Email is required' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
     // Verify Cloudflare Turnstile
-    const secretKey = env.TURNSTILE_SECRET_KEY || '0x4AAAAAAAQTptj2So4dx43e';
+    const secretKey = env.TURNSTILE_SECRET_KEY;
 
     if (secretKey && turnstileToken) {
       const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -50,7 +50,7 @@ export async function onRequestPost(context) {
 
     if (!brevoApiKey || !toEmail || !fromEmail) {
       console.log('=== NEW LEAD (Brevo not fully configured in Pages env) ===');
-      console.log({ address, email, phone, source, page });
+      console.log({ address, email, phone, message, source, page });
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -83,14 +83,15 @@ export async function onRequestPost(context) {
         sender: { name: senderName, email: senderEmail },
         to: [{ email: toEmail }],
         replyTo: { email, name: email },
-        subject: `New Cash Offer Lead: ${address}`,
+        subject: address ? `New Cash Offer Lead: ${address}` : `New Inquiry from ${email}`,
         htmlContent: `
           <h2 style="font-family: system-ui, sans-serif; color: #1c2657;">New Lead from Solid Properties Website</h2>
           
           <p style="font-size: 15px; line-height: 1.5;">
-            <strong>Property Address:</strong> ${address}<br>
+            ${address ? `<strong>Property Address:</strong> ${address}<br>` : ''}
             <strong>Email:</strong> <a href="mailto:${email}">${email}</a><br>
             <strong>Phone:</strong> ${phone ? `<a href="tel:${phone}">${phone}</a>` : 'Not provided'}<br>
+            ${message ? `<strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}<br>` : ''}
             <strong>Source:</strong> ${source || 'website'}<br>
             <strong>Page:</strong> ${page || '/'}
           </p>

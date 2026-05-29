@@ -5,6 +5,11 @@ interface Props {
   subtitle?: string;
   buttonText?: string;
   showPhone?: boolean;
+  showAddress?: boolean;
+  showMessage?: boolean;
+  requireMessage?: boolean;
+  showDisclaimer?: boolean;
+  disclaimer?: string;
   class?: string;
 }
 
@@ -14,6 +19,11 @@ const {
   subtitle = 'Fill out the form below and we’ll get back to you within 24 hours.',
   buttonText = 'Get Cash Offer',
   showPhone = true,
+  showAddress = true,
+  showMessage = false,
+  requireMessage = false,
+  showDisclaimer = true,
+  disclaimer,
   class: className = '',
 } = Astro.props;
 ---
@@ -32,19 +42,21 @@ const {
 
   <div class="space-y-4">
     <!-- Property Address -->
-    <div>
-      <label for="address" class="block text-sm font-medium text-[var(--heading-color)] mb-1.5">
-        Property Address <span class="text-red-500">*</span>
-      </label>
-      <input
-        type="text"
-        id="address"
-        name="address"
-        placeholder="123 Main Street, San Diego, CA 92101"
-        required
-        autocomplete="street-address"
-      />
-    </div>
+    {showAddress && (
+      <div>
+        <label for="address" class="block text-sm font-medium text-[var(--heading-color)] mb-1.5">
+          Property Address <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="123 Main Street, San Diego, CA 92101"
+          required
+          autocomplete="street-address"
+        />
+      </div>
+    )}
 
     <!-- Email -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -79,6 +91,23 @@ const {
       )}
     </div>
 
+    <!-- Message -->
+    {showMessage && (
+      <div>
+        <label for="message" class="block text-sm font-medium text-[var(--heading-color)] mb-1.5">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          placeholder="How can we help you?"
+          class="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-white text-base placeholder:text-gray-400 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)]/20 transition-all"
+          required={requireMessage}
+        ></textarea>
+      </div>
+    )}
+
     <!-- Turnstile Widget -->
     <div class="pt-2">
       <div 
@@ -100,9 +129,11 @@ const {
       <span class="button-loading hidden">Sending...</span>
     </button>
 
-    <p class="text-[12px] text-center text-[var(--grey)]">
-      No obligation. We respect your privacy.
-    </p>
+    {showDisclaimer && (
+      <p class="text-[12px] text-center text-[var(--grey)]">
+        {disclaimer ?? "No obligation. We respect your privacy."}
+      </p>
+    )}
   </div>
 
   <!-- Success / Error states -->
@@ -180,13 +211,25 @@ const {
       const addressEl = form.querySelector('#address');
       const emailEl = form.querySelector('#email');
       const phoneEl = form.querySelector('#phone');
+      const messageEl = form.querySelector('#message');
 
       const address = addressEl?.value.trim() || '';
       const email = emailEl?.value.trim() || '';
       const phone = phoneEl?.value.trim() || '';
+      const message = messageEl?.value.trim() || '';
 
-      if (!address || !email) {
-        alert('Please provide both address and email.');
+      if (showAddress && !address) {
+        alert('Please provide the property address.');
+        return;
+      }
+
+      if (!email) {
+        alert('Please provide your email address.');
+        return;
+      }
+
+      if (showMessage && requireMessage && !message) {
+        alert('Please provide a message.');
         return;
       }
 
@@ -211,9 +254,10 @@ const {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            address,
+            address: showAddress ? address : undefined,
             email,
             phone,
+            message: showMessage ? message : undefined,
             turnstileToken: token,
             source: 'website',
             page: window.location.pathname,

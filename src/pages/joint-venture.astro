@@ -6,7 +6,7 @@ import LeadForm from '../components/LeadForm.astro';
 ---
 
 <Layout
-  title="Joint Ventures | Solid Properties & Investments LLC"
+  title="Joint Ventures | Solid Properties & Investments"
   description="Partner with Solid Properties on real estate investments in San Diego. We handle closing, funding, renovations, escrow, and more."
 >
   <Navbar />
@@ -52,6 +52,9 @@ import LeadForm from '../components/LeadForm.astro';
           subtitle="Tell us about your next project or investment opportunity."
           buttonText="Let’s Talk"
           showPhone={true}
+          showMessage={true}
+          requireMessage={true}
+          showDisclaimer={false}
         />
         <div class="mt-8 pt-6 border-t text-xs text-center text-[var(--grey)]">
           All inquiries are confidential.

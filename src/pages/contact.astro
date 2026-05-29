@@ -6,7 +6,7 @@ import LeadForm from '../components/LeadForm.astro';
 ---
 
 <Layout
-  title="Contact Us | Solid Properties & Investments LLC"
+  title="Contact Us | Solid Properties & Investments"
   description="Get in touch with Solid Properties. We buy houses cash in San Diego and are happy to answer any questions."
 >
   <Navbar />
@@ -23,6 +23,10 @@ import LeadForm from '../components/LeadForm.astro';
           title="Send us a message"
           subtitle="Whether you have a property to sell or just want to learn more, we’re here to help."
           buttonText="Submit Inquiry"
+          showAddress={false}
+          showMessage={true}
+          requireMessage={true}
+          disclaimer="We respect your privacy."
         />
       </div>
 
