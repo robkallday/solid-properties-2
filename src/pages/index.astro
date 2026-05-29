@@ -55,21 +55,11 @@ import Lottie from '../components/Lottie.astro';
         </div>
       </div>
     </div>
-
-    <!-- Abstract background decorations (preserved from original) -->
-    <div class="absolute inset-0 pointer-events-none opacity-60">
-      <img src="/images/abstract_bg_1.svg" alt="" class="absolute -top-10 -left-10 w-1/2 max-w-[520px]" />
-      <img src="/images/abstract_bg_2.svg" alt="" class="absolute bottom-0 right-0 w-1/3 max-w-[420px]" />
-    </div>
   </section>
 
   <!-- TRUST BAR -->
   <div class="border-b bg-white py-5">
     <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-10 gap-y-4 text-sm text-[var(--grey)]">
-      <div class="flex items-center gap-x-2">
-        <span class="font-semibold text-[var(--heading-color)]">500+</span> homes purchased
-      </div>
-      <div>•</div>
       <div>No realtor commissions</div>
       <div>•</div>
       <div>Close in as little as 7 days</div>
@@ -121,11 +111,14 @@ import Lottie from '../components/Lottie.astro';
         {[
           ['No repairs needed', true, false],
           ['No realtor commissions', true, false],
+          ['No closing costs', true, false],
+          ['No open houses', true, false],
+          ['No 30 day escrow', true, false],
+          ['Immediate offer', true, false],
           ['Close on your timeline', true, false],
+          ['Flexible closing date', true, false],
           ['Certain sale', true, false],
           ['We handle paperwork', true, false],
-          ['Multiple showings & open houses', false, true],
-          ['Uncertain closing date', false, true],
         ].map(([feature, cash, trad], i) => (
           <div class="grid grid-cols-3 items-center px-8 py-5 border-t text-[15px]" key={i}>
             <div class="font-medium text-[var(--heading-color)]">{feature}</div>
@@ -145,31 +138,47 @@ import Lottie from '../components/Lottie.astro';
     <p class="paragraph-large max-w-xl mx-auto mb-10">Real stories from San Diego homeowners who sold with us.</p>
 
     <div class="relative mx-auto max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-black">
-      <img src="/images/wistia_slide.jpg" alt="Client video testimonial" class="w-full aspect-video object-cover opacity-90" />
-      <a href="https://solidpropertiesllc.wistia.com/medias/ytf8j7hb0m" target="_blank" class="absolute inset-0 flex items-center justify-center group">
-        <div class="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:bg-white transition-all">
-          <img src="/images/play-white.svg" alt="Play video" class="w-7 h-7 ml-1 invert" />
+      <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+        <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+          <iframe 
+            src="https://fast.wistia.net/embed/iframe/ytf8j7hb0m?videoFoam=true" 
+            title="Client video testimonial" 
+            allow="autoplay; fullscreen; picture-in-picture" 
+            allowtransparency="true" 
+            frameborder="0" 
+            scrolling="no" 
+            class="wistia_embed" 
+            name="wistia_embed" 
+            style="height:100%;width:100%;" 
+          ></iframe>
         </div>
-      </a>
+      </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="max-w-4xl mx-auto px-6 pb-24">
+  <section id="faq" class="max-w-5xl mx-auto px-6 pb-24">
     <div class="text-center mb-12">
       <p class="subtitle">QUESTIONS?</p>
       <h2 class="section-title">Frequently Asked Questions</h2>
     </div>
 
-    <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[
-        ['How fast can you close?', 'We can close in as little as 7 days, or on whatever timeline works best for you.'],
-        ['Do I need to make repairs?', 'No. We buy houses in any condition. You don’t need to fix or clean anything.'],
-        ['Are there any fees or commissions?', 'Never. We pay all closing costs. You keep 100% of the offer we make.'],
-        ['Is my information private?', 'Yes. We respect your privacy and will never share your information.'],
-        ['What areas do you buy in?', 'We primarily buy in San Diego County and surrounding areas.'],
+        ['What kind of houses do you buy?', 'We typically buy houses that need repair. If your house needs a lot of work, we are interested. Although we don\'t purchase many properties in excellent condition, we can still help you out.'],
+        ['How are you able to purchase and close so fast?', 'Since we are a cash buyer, the sale process is quick. We don\'t wait on banks to approve loans or wait for inspection periods and long escrows. This allows us to buy houses fast.'],
+        ['How is your company different?', 'We are not a nationwide franchise with thousands of locations and employees. Our company is small and we specialize in southern California. Your calls and messages come to us and we work with you directly. Large companies with an 800 number usually use an out of state call center and pass you around. We are experienced San Diego investors and work with you every step of the way.'],
+        ['Do I need to clean or fix my house?', 'Nope, we purchase the property in it\'s current As-Is condition. No need to clean or fix anything. Feel free to leave any trash and unwanted items. Just take what you need and we take care of the rest. We buy houses in AS-IS condition.'],
+        ['How fast can you purchase?', 'Typically we need 7-10 days to buy houses. We can close on whichever date works best for you. Let us know your timeline and we can make it happen.'],
+        ['My house is in great condition, can you still buy it?', 'We mostly purchase properties in poor condition or in need of repairs. If you need to sell immediately, we can still make you a cash offer. If you\'re not in a hurry and your house is in great condition, we can help sell traditionally.'],
+        ['How much would you pay for my house?', 'Since we are a cash buyer, we buy houses at discount. Our cash price is usually about 10% less than what you would get traditionally. For a no obligation quote, fill out our form and we\'ll get back to you with a fair offer.'],
+        ['Wouldn’t my property sell for more with a realtor?', 'Your house can sell for more but you don’t walk away with the sale price. Real estate agent commissions are around 6% plus closing cost and any repair requests. You’ll also need to prep your home and make presentable for open houses.'],
+        ['Can you renovate and sell my property for me?', 'Yes we can! As long as you\'re not in a hurry and can be out of the house during renovations. We put out the money to clean, fix and renovate. Once we sell the property, these costs are deducted from the sale price.'],
+        ['Have I seen your TV commercials?', 'Nope, we are a small local San Diego company and don\'t have the budget for TV advertisements.'],
+        ['Are you a We Buy Houses company?', 'We are a real estate solutions company and not one solution fits all. We purchase properties for cash but can also sell your property traditionally.'],
+        ['Have I seen your signs in my neighborhood?', 'Nope that was not us. There are lots of San Diego companies that put we buy houses signs in neighborhoods. There are too many polluting the neighborhoods so we decided not to advertise this way.'],
       ].map(([q, a]) => (
-        <details class="group bg-white border border-gray-100 rounded-2xl p-7">
+        <details class="group bg-white border border-gray-100 rounded-2xl p-7" name={`faq-${i}`}>
           <summary class="font-semibold text-[var(--heading-color)] text-lg cursor-pointer list-none flex justify-between items-center">
             {q}
             <span class="text-2xl text-[var(--main-color)] group-open:rotate-45 transition-transform">+</span>
