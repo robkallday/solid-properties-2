@@ -1,21 +1,11 @@
-import type { APIRoute } from 'astro';
+/**
+ * Cloudflare Pages Function for handling lead form submissions.
+ * This replaces the old src/pages/api/lead.ts
+ */
 
-// Force this route to be rendered on-demand (Cloudflare Pages Function)
-export const prerender = false;
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
-// ============================================
-// Brevo (Sendinblue) Lead Notification Handler
-// ============================================
-// Uses direct fetch to Brevo's REST API (lightweight + Cloudflare compatible)
-//
-// Required environment variables (set in Cloudflare Pages):
-//   BREVO_API_KEY          → Your Brevo v3 API key
-//   LEAD_EMAIL_TO          → Where you want to receive leads (your inbox)
-//   FROM_EMAIL             → Must be a verified sender in your Brevo account
-//                              Example: "Solid Properties <hello@yourdomain.com>"
-//   TURNSTILE_SECRET_KEY   → Optional but recommended
-
-export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const { address, email, phone, turnstileToken, source, page } = body;
@@ -24,14 +14,12 @@ export const POST: APIRoute = async ({ request }) => {
     if (!address || !email) {
       return new Response(JSON.stringify({ message: 'Address and email are required' }), {
         status: 400,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 
     // Verify Cloudflare Turnstile
-    const secretKey =
-      import.meta.env.TURNSTILE_SECRET_KEY ||
-      process.env.TURNSTILE_SECRET_KEY ||
-      '0x4AAAAAAAQTptj2So4dx43e';
+    const secretKey = env.TURNSTILE_SECRET_KEY || '0x4AAAAAAAQTptj2So4dx43e';
 
     if (secretKey && turnstileToken) {
       const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -50,23 +38,26 @@ export const POST: APIRoute = async ({ request }) => {
         console.warn('Turnstile verification failed', verifyData);
         return new Response(JSON.stringify({ message: 'Security check failed' }), {
           status: 403,
+          headers: { 'Content-Type': 'application/json' },
         });
       }
     }
 
-    // Get configuration
-    const brevoApiKey = import.meta.env.BREVO_API_KEY || process.env.BREVO_API_KEY;
-    const toEmail = import.meta.env.LEAD_EMAIL_TO || process.env.LEAD_EMAIL_TO;
-    const fromEmail = import.meta.env.FROM_EMAIL || process.env.FROM_EMAIL;
+    // Get Brevo configuration from environment variables
+    const brevoApiKey = env.BREVO_API_KEY;
+    const toEmail = env.LEAD_EMAIL_TO;
+    const fromEmail = env.FROM_EMAIL;
 
     if (!brevoApiKey || !toEmail || !fromEmail) {
-      // Development / fallback mode
-      console.log('=== NEW LEAD (Brevo not fully configured) ===');
+      console.log('=== NEW LEAD (Brevo not fully configured in Pages env) ===');
       console.log({ address, email, phone, source, page });
-      return new Response(JSON.stringify({ success: true }), { status: 200 });
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    // Parse FROM_EMAIL into name + email
+    // Parse FROM_EMAIL
     const fromMatch = fromEmail.match(/^(?:"?([^"<]+)"?\s*)?<([^>]+)>$|(.+)/);
     let senderName = 'Solid Properties';
     let senderEmail = fromEmail;
@@ -80,7 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Send via Brevo REST API (lightweight, no heavy SDK)
+    // Send via Brevo REST API
     const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -113,14 +104,21 @@ export const POST: APIRoute = async ({ request }) => {
     if (!brevoRes.ok) {
       const errorText = await brevoRes.text();
       console.error('Brevo API error:', brevoRes.status, errorText);
-      throw new Error(`Brevo API responded with ${brevoRes.status}`);
+      return new Response(JSON.stringify({ message: 'Failed to send notification' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error('Lead form error (Brevo):', error);
+    console.error('Lead form error:', error);
     return new Response(JSON.stringify({ message: 'Internal server error' }), {
       status: 500,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
-};
+}
