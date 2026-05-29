@@ -1,0 +1,199 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Lottie from '../components/Lottie.astro';
+---
+
+<Layout
+  title="Solid Properties & Investments LLC | We Buy Houses Cash in San Diego"
+  description="We buy houses cash in San Diego. Get a fast, fair cash offer for your home. Probate, foreclosure, divorce — no repairs, no commissions, no hassle."
+>
+  <Navbar />
+
+  <!-- HERO -->
+  <section class="relative pt-16 pb-20 md:pt-20 md:pb-24 bg-[#f8f8f8] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-12 gap-x-10 items-center">
+        <!-- Left content -->
+        <div class="md:col-span-7">
+          <div class="max-w-2xl">
+            <p class="uppercase tracking-[3.5px] text-xs font-semibold text-[var(--subtitle-color)] mb-3">SAN DIEGO, CA</p>
+            <h1 class="text-[56px] md:text-[68px] leading-[1.05] font-extrabold text-[var(--heading-color)] tracking-[-1.5px]">
+              We buy houses<br />
+              <span class="text-[var(--main-color)]">faster</span>.
+            </h1>
+            <p class="mt-6 text-xl md:text-2xl text-[var(--paragraphs-color)] max-w-[42ch]">
+              We buy houses cash in San Diego. If you need to sell quickly, we buy homes fast.
+              Probate, foreclosure, divorce — get a quick, fair offer today.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#get-offer" class="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-[var(--main-color)] text-white text-lg font-semibold hover:bg-[#2f7fc4] transition-all active:scale-[0.985]">
+                Get My Cash Offer
+              </a>
+              <a href="tel:1-619-777-6088" class="inline-flex items-center justify-center px-8 py-4 rounded-2xl border-2 border-[var(--heading-color)] text-[var(--heading-color)] text-lg font-semibold hover:bg-[var(--heading-color)] hover:text-white transition-all">
+                Call 619-777-6088
+              </a>
+            </div>
+
+            <p class="mt-5 text-sm text-[var(--grey)]">No obligation • No repairs needed • Close on your schedule</p>
+          </div>
+        </div>
+
+        <!-- Right side: prominent lead form -->
+        <div class="md:col-span-5 mt-12 md:mt-0">
+          <div id="get-offer" class="bg-white rounded-3xl shadow-xl p-8 md:p-9 border border-gray-100">
+            <LeadForm
+              variant="hero"
+              title="Get a Cash Offer Today"
+              subtitle="Tell us about your property. We’ll respond within 24 hours."
+              buttonText="Get My Cash Offer"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abstract background decorations (preserved from original) -->
+    <div class="absolute inset-0 pointer-events-none opacity-60">
+      <img src="/images/abstract_bg_1.svg" alt="" class="absolute -top-10 -left-10 w-1/2 max-w-[520px]" />
+      <img src="/images/abstract_bg_2.svg" alt="" class="absolute bottom-0 right-0 w-1/3 max-w-[420px]" />
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="border-b bg-white py-5">
+    <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-10 gap-y-4 text-sm text-[var(--grey)]">
+      <div class="flex items-center gap-x-2">
+        <span class="font-semibold text-[var(--heading-color)]">500+</span> homes purchased
+      </div>
+      <div>•</div>
+      <div>No realtor commissions</div>
+      <div>•</div>
+      <div>Close in as little as 7 days</div>
+      <div>•</div>
+      <div>Local San Diego team</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="max-w-7xl mx-auto px-6 pt-20 pb-16">
+    <div class="text-center mb-12">
+      <p class="subtitle">4 SIMPLE STEPS</p>
+      <h2 class="section-title">How it works</h2>
+      <p class="paragraph-large max-w-2xl mx-auto">Our process is simple. In just a few steps we’ll make a cash offer and purchase your house fast.</p>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-6">
+      {[
+        { num: '01', title: 'Send us the address', desc: 'Fill out our form, send us a chat or give us a call. We just need some basic info about your property.' },
+        { num: '02', title: 'We review the property', desc: 'After a quick review we’ll contact you with any additional questions. Usually takes less than 48 hours.' },
+        { num: '03', title: 'You get a cash offer', desc: 'We send you a no-obligation cash offer for your property. You decide if it works for you.' },
+        { num: '04', title: 'House is sold', desc: 'If accepted, we take care of everything and close on the date you choose. No repairs. No hassle.' }
+      ].map(step => (
+        <div class="group bg-white rounded-3xl p-8 border border-gray-100 hover:border-[var(--main-color)]/30 transition-all">
+          <div class="text-5xl font-black text-[var(--main-color)]/10 group-hover:text-[var(--main-color)]/15 transition-colors tabular-nums">{step.num}</div>
+          <h3 class="mt-4 text-2xl font-bold text-[var(--heading-color)]">{step.title}</h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-[var(--paragraphs-color)]">{step.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CASH VS TRADITIONAL (Comparison Table) -->
+  <section class="bg-[#f8f8f8] py-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <p class="subtitle">THE SMART CHOICE</p>
+        <h2 class="section-title">Cash vs. Listing Traditionally</h2>
+        <p class="paragraph-large max-w-2xl mx-auto">We can purchase your property with cash or list traditionally. Our cash sale option is the fastest, hassle-free way to sell.</p>
+      </div>
+
+      <div class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm">
+        <div class="grid grid-cols-3 text-center font-semibold text-lg py-5 bg-gray-50 text-[var(--heading-color)]">
+          <div></div>
+          <div class="text-[var(--main-color)]">Cash Sale</div>
+          <div>Traditional Sale</div>
+        </div>
+
+        {[
+          ['No repairs needed', true, false],
+          ['No realtor commissions', true, false],
+          ['Close on your timeline', true, false],
+          ['Certain sale', true, false],
+          ['We handle paperwork', true, false],
+          ['Multiple showings & open houses', false, true],
+          ['Uncertain closing date', false, true],
+        ].map(([feature, cash, trad], i) => (
+          <div class="grid grid-cols-3 items-center px-8 py-5 border-t text-[15px]" key={i}>
+            <div class="font-medium text-[var(--heading-color)]">{feature}</div>
+            <div class="flex justify-center">{cash ? <img src="/images/check_blue.svg" alt="Yes" class="w-6 h-6" /> : <img src="/images/grey-x.svg" alt="No" class="w-6 h-6" />}</div>
+            <div class="flex justify-center">{trad ? <img src="/images/check_blue.svg" alt="Yes" class="w-6 h-6" /> : <img src="/images/grey-x.svg" alt="No" class="w-6 h-6" />}</div>
+          </div>
+        ))}
+      </div>
+
+      <p class="text-center mt-6 text-sm text-[var(--grey)]">Cash is king when you need speed and certainty.</p>
+    </div>
+  </section>
+
+  <!-- VIDEO / TESTIMONIAL HIGHLIGHT -->
+  <section class="max-w-5xl mx-auto px-6 py-20 text-center">
+    <h2 class="section-title mb-4">See what our clients say</h2>
+    <p class="paragraph-large max-w-xl mx-auto mb-10">Real stories from San Diego homeowners who sold with us.</p>
+
+    <div class="relative mx-auto max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-black">
+      <img src="/images/wistia_slide.jpg" alt="Client video testimonial" class="w-full aspect-video object-cover opacity-90" />
+      <a href="https://solidpropertiesllc.wistia.com/medias/ytf8j7hb0m" target="_blank" class="absolute inset-0 flex items-center justify-center group">
+        <div class="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center group-hover:bg-white transition-all">
+          <img src="/images/play-white.svg" alt="Play video" class="w-7 h-7 ml-1 invert" />
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-4xl mx-auto px-6 pb-24">
+    <div class="text-center mb-12">
+      <p class="subtitle">QUESTIONS?</p>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-4">
+      {[
+        ['How fast can you close?', 'We can close in as little as 7 days, or on whatever timeline works best for you.'],
+        ['Do I need to make repairs?', 'No. We buy houses in any condition. You don’t need to fix or clean anything.'],
+        ['Are there any fees or commissions?', 'Never. We pay all closing costs. You keep 100% of the offer we make.'],
+        ['Is my information private?', 'Yes. We respect your privacy and will never share your information.'],
+        ['What areas do you buy in?', 'We primarily buy in San Diego County and surrounding areas.'],
+      ].map(([q, a]) => (
+        <details class="group bg-white border border-gray-100 rounded-2xl p-7">
+          <summary class="font-semibold text-[var(--heading-color)] text-lg cursor-pointer list-none flex justify-between items-center">
+            {q}
+            <span class="text-2xl text-[var(--main-color)] group-open:rotate-45 transition-transform">+</span>
+          </summary>
+          <p class="mt-4 text-[15px] leading-relaxed pr-8">{a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="bg-[var(--heading-color)] py-20 text-center text-white">
+    <div class="max-w-3xl mx-auto px-6">
+      <h2 class="text-5xl font-bold tracking-tight">Ready to sell your house fast?</h2>
+      <p class="mt-4 text-2xl text-white/80">Get a no-obligation cash offer in 24 hours.</p>
+
+      <div class="mt-10">
+        <a href="#get-offer" class="inline-block px-10 py-4 rounded-2xl bg-white text-[var(--heading-color)] font-semibold text-lg hover:bg-[var(--golden)] hover:text-black transition-all">
+          Get My Cash Offer Now
+        </a>
+      </div>
+      <div class="mt-4 text-white/60 text-sm">Or call us directly at <a href="tel:1-619-777-6088" class="underline hover:text-white">619-777-6088</a></div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

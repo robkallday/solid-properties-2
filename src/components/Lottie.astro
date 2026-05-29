@@ -1,0 +1,48 @@
+---
+interface Props {
+  src: string; // path under /public/lottie/, e.g. "sold-20out.json"
+  class?: string;
+  loop?: boolean;
+  autoplay?: boolean;
+}
+
+const { src, class: className = 'w-full h-64', loop = true, autoplay = true } = Astro.props;
+const jsonPath = `/lottie/${src.replace(/^\//, '')}`;
+---
+
+<div class={`lottie-container ${className}`} data-lottie-src={jsonPath} data-loop={loop} data-autoplay={autoplay}></div>
+
+<script>
+  import lottie from 'lottie-web';
+
+  function initLotties() {
+    document.querySelectorAll('[data-lottie-src]').forEach((container) => {
+      const el = container as HTMLElement;
+      if (el.dataset.initialized) return;
+
+      const src = el.dataset.lottieSrc!;
+      const loop = el.dataset.loop !== 'false';
+      const autoplay = el.dataset.autoplay !== 'false';
+
+      lottie.loadAnimation({
+        container: el,
+        renderer: 'svg',
+        loop,
+        autoplay,
+        path: src,
+      });
+
+      el.dataset.initialized = 'true';
+    });
+  }
+
+  // Run on load and after view transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLotties);
+  } else {
+    initLotties();
+  }
+
+  // Re-init on Astro view transitions if used later
+  document.addEventListener('astro:page-load', initLotties);
+</script>

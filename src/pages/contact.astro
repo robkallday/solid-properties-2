@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import LeadForm from '../components/LeadForm.astro';
+---
+
+<Layout
+  title="Contact Us | Solid Properties & Investments LLC"
+  description="Get in touch with Solid Properties. We buy houses cash in San Diego and are happy to answer any questions."
+>
+  <Navbar />
+
+  <div class="bg-[#f8f8f8] pt-12 pb-20">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <h1 class="section-title">Contact Us</h1>
+        <p class="paragraph-large max-w-lg mx-auto">Thanks for reaching out. Fill out the form below and we’ll get back to you as soon as possible.</p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-10 shadow-sm border border-gray-100 max-w-2xl mx-auto">
+        <LeadForm
+          title="Send us a message"
+          subtitle="Whether you have a property to sell or just want to learn more, we’re here to help."
+          buttonText="Submit Inquiry"
+        />
+      </div>
+
+      <div class="mt-12 text-center text-sm">
+        <p class="font-medium text-[var(--heading-color)]">Prefer to talk?</p>
+        <a href="tel:1-619-777-6088" class="text-3xl font-semibold text-[var(--main-color)] hover:underline">619-777-6088</a>
+        <p class="mt-1 text-[var(--grey)]">Monday – Friday, 8am – 6pm</p>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>

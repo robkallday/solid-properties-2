@@ -1,0 +1,96 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="/" class="flex items-center">
+        <img
+          src="/images/solid_logo_2020c.png"
+          alt="Solid Properties & Investments LLC"
+          class="h-9 w-auto"
+          width="144"
+          height="36"
+        />
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-x-9 text-[15px]">
+        <a href="/#about" class="nav-link">About Us</a>
+        <a href="/#faq" class="nav-link">FAQ</a>
+        <a href="/contact" class={`nav-link ${currentPath === '/contact' ? 'text-[var(--main-color)]' : ''}`}>Contact Us</a>
+        <a href="/joint-venture" class={`nav-link ${currentPath === '/joint-venture' ? 'text-[var(--main-color)]' : ''}`}>Joint Venture</a>
+      </div>
+
+      <!-- Phone + CTA -->
+      <div class="hidden md:flex items-center gap-x-4">
+        <a
+          href="tel:1-619-777-6088"
+          class="flex items-center gap-x-2 text-[var(--heading-color)] hover:text-[var(--main-color)] transition-colors font-medium"
+        >
+          <img src="/images/phone-call.svg" alt="" class="w-4 h-4" />
+          <span>619-777-6088</span>
+        </a>
+
+        <a
+          href="#get-offer"
+          class="px-5 py-2.5 rounded-full bg-[var(--main-color)] text-white text-sm font-semibold hover:bg-[#2f7fc4] transition-all active:scale-[0.985]"
+        >
+          Get Cash Offer
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden p-2 text-[var(--heading-color)]"
+        aria-label="Open menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t bg-white">
+    <div class="px-6 py-6 flex flex-col gap-y-4 text-[15px]">
+      <a href="/#about" class="nav-link py-1">About Us</a>
+      <a href="/#faq" class="nav-link py-1">FAQ</a>
+      <a href="/contact" class="nav-link py-1">Contact Us</a>
+      <a href="/joint-venture" class="nav-link py-1">Joint Venture</a>
+
+      <div class="pt-4 border-t">
+        <a href="tel:1-619-777-6088" class="flex items-center gap-x-2 text-[var(--heading-color)] py-2">
+          <img src="/images/phone-call.svg" alt="" class="w-4 h-4" />
+          <span class="font-medium">619-777-6088</span>
+        </a>
+        <a
+          href="#get-offer"
+          class="mt-3 block w-full text-center px-5 py-3 rounded-full bg-[var(--main-color)] text-white text-sm font-semibold"
+        >
+          Get Cash Offer
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Simple mobile menu toggle
+  const btn = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+    const icon = btn.querySelector('svg');
+    if (icon) {
+      icon.innerHTML = menu?.classList.contains('hidden')
+        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />'
+        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+    }
+  });
+</script>

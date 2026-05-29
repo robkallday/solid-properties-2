@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Solid Properties & Investments LLC',
+  description = 'We buy houses cash in San Diego. Get a quick, fair cash offer for your home today. Probate, foreclosure, divorce — we handle it all.',
+  image = '/images/solid_logo_2020c.png',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts (matching original Webflow) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Cabin:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Fathom Analytics (from original site) -->
+    <script src="https://cdn.usefathom.com/script.js" data-site="TQKNVAQO" defer></script>
+
+    <!-- Open Graph / SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+
+  <body class="antialiased bg-white text-[var(--paragraphs-color)]">
+    <slot />
+  </body>
+</html>

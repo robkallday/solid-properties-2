@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import LeadForm from '../components/LeadForm.astro';
+---
+
+<Layout
+  title="Joint Ventures | Solid Properties & Investments LLC"
+  description="Partner with Solid Properties on real estate investments in San Diego. We handle closing, funding, renovations, escrow, and more."
+>
+  <Navbar />
+
+  <section class="pt-12 pb-16 bg-[#f8f8f8]">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h1 class="section-title">Joint Ventures</h1>
+      <p class="paragraph-large max-w-2xl mx-auto">We partner with investors, contractors, and real estate professionals who want to scale their business with a trusted local team.</p>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <div class="grid md:grid-cols-2 gap-16 items-start">
+      <div>
+        <h2 class="text-4xl font-bold text-[var(--heading-color)] tracking-tight">Why partner with us?</h2>
+        <p class="mt-5 text-[17px] leading-relaxed">We bring operational excellence, local market knowledge, and a proven track record of successful transactions. You bring capital, deals, or construction expertise — we handle the rest.</p>
+
+        <div class="mt-10 space-y-6">
+          {[
+            { title: 'Assist with closing', desc: 'We manage the entire closing process so you don’t have to.' },
+            { title: 'Help with funding', desc: 'Access to capital partners and creative financing structures.' },
+            { title: 'Renovations & rehabs', desc: 'Full-service renovation management with trusted contractor network.' },
+            { title: 'Escrow & title', desc: 'We coordinate with escrow officers and title companies daily.' },
+            { title: 'Guidance & strategy', desc: 'Decades of combined experience in distressed and value-add deals.' },
+            { title: 'List & sell property', desc: 'When the time is right, we can prepare and market the asset.' },
+          ].map(item => (
+            <div class="flex gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-[var(--main-color)]/10 flex items-center justify-center flex-shrink-0">
+                <span class="text-[var(--main-color)] text-lg leading-none">✓</span>
+              </div>
+              <div>
+                <div class="font-semibold text-[var(--heading-color)]">{item.title}</div>
+                <p class="text-[15px] mt-1 text-[var(--paragraphs-color)]">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-9 border border-gray-100 shadow-sm">
+        <LeadForm
+          title="Start a conversation"
+          subtitle="Tell us about your next project or investment opportunity."
+          buttonText="Let’s Talk"
+          showPhone={true}
+        />
+        <div class="mt-8 pt-6 border-t text-xs text-center text-[var(--grey)]">
+          All inquiries are confidential.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

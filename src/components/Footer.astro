@@ -1,0 +1,66 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-[var(--heading-color)] text-white pt-14 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-12 gap-y-12 pb-12 border-b border-white/10">
+      <!-- Logo + tagline -->
+      <div class="md:col-span-5">
+        <a href="/" class="inline-block">
+          <img
+            src="/images/solid_logo_2020_footer_hoover.png"
+            alt="Solid Properties"
+            class="h-8 w-auto brightness-0 invert"
+          />
+        </a>
+        <p class="mt-4 max-w-xs text-white/60 text-[15px]">
+          We buy houses cash in San Diego. Fast, fair offers with no repairs, no commissions, and no hassle.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div class="md:col-span-2">
+        <div class="font-semibold text-sm tracking-widest mb-4 text-white/70">COMPANY</div>
+        <div class="space-y-2 text-[15px]">
+          <a href="/#about" class="block hover:text-[var(--main-color)] transition-colors">About Us</a>
+          <a href="/#faq" class="block hover:text-[var(--main-color)] transition-colors">FAQ</a>
+          <a href="/joint-venture" class="block hover:text-[var(--main-color)] transition-colors">Joint Ventures</a>
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="font-semibold text-sm tracking-widest mb-4 text-white/70">CONTACT</div>
+        <div class="space-y-2 text-[15px]">
+          <a href="/contact" class="block hover:text-[var(--main-color)] transition-colors">Contact Us</a>
+          <a href="tel:1-619-777-6088" class="block hover:text-[var(--main-color)] transition-colors">619-777-6088</a>
+        </div>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="font-semibold text-sm tracking-widest mb-4 text-white/70">LEGAL</div>
+        <div class="space-y-2 text-[15px]">
+          <a href="/privacy-security-policy" class="block hover:text-[var(--main-color)] transition-colors">Privacy &amp; Security</a>
+          <a href="/terms-of-service" class="block hover:text-[var(--main-color)] transition-colors">Terms of Service</a>
+          <a href="/accessibility" class="block hover:text-[var(--main-color)] transition-colors">Accessibility</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-y-4 text-sm text-white/50">
+      <div>
+        &copy; {year} Solid Properties &amp; Investments LLC. All rights reserved.
+      </div>
+
+      <div class="flex items-center gap-x-5">
+        <a href="https://www.facebook.com/SolidPropertiesLLC/" target="_blank" rel="noopener" class="hover:text-white transition-colors">
+          <img src="/images/facebook.svg" alt="Facebook" class="w-4 h-4 invert" />
+        </a>
+        <a href="https://www.instagram.com/solidproperties/" target="_blank" rel="noopener" class="hover:text-white transition-colors">
+          <img src="/images/instagram.svg" alt="Instagram" class="w-4 h-4 invert" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
