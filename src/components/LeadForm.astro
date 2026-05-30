@@ -10,6 +10,7 @@ interface Props {
   requireMessage?: boolean;
   showDisclaimer?: boolean;
   disclaimer?: string;
+  web3formsAccessKey?: string;
   class?: string;
 }
 
@@ -24,6 +25,7 @@ const {
   requireMessage = false,
   showDisclaimer = true,
   disclaimer,
+  web3formsAccessKey,
   class: className = '',
 } = Astro.props;
 ---
@@ -32,6 +34,10 @@ const {
   id="lead-form"
   class={`lead-form ${className}`}
   data-variant={variant}
+  data-show-address={showAddress}
+  data-show-message={showMessage}
+  data-require-message={requireMessage}
+  data-web3forms-access-key={web3formsAccessKey || ''}
 >
   {title && (
     <div class="mb-6">
@@ -123,7 +129,7 @@ const {
     <button
       type="submit"
       class="submit-button w-full mt-2"
-      disabled
+      disabled={!web3formsAccessKey}
     >
       <span class="button-text">{buttonText}</span>
       <span class="button-loading hidden">Sending...</span>
@@ -172,6 +178,12 @@ const {
     const errorEl = document.getElementById('form-error');
     const buttonText = submitBtn?.querySelector('.button-text');
     const buttonLoading = submitBtn?.querySelector('.button-loading');
+
+    // Read props from data attributes (available in client-side script)
+    const showAddress = form.dataset.showAddress === 'true';
+    const showMessage = form.dataset.showMessage === 'true';
+    const requireMessage = form.dataset.requireMessage === 'true';
+    const web3formsAccessKey = form.dataset.web3formsAccessKey || '';
 
     let turnstileToken = '';
 
@@ -233,12 +245,15 @@ const {
         return;
       }
 
-      const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
-      const token = turnstileResponse?.value || turnstileToken;
+      // If using Web3Forms, we don't need Turnstile validation here
+      if (!web3formsAccessKey) {
+        const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
+        const token = turnstileResponse?.value || turnstileToken;
 
-      if (!token) {
-        alert('Please complete the security check.');
-        return;
+        if (!token) {
+          alert('Please complete the security check.');
+          return;
+        }
       }
 
       if (submitBtn) {
@@ -250,26 +265,45 @@ const {
       errorEl?.classList.add('hidden');
 
       try {
-        const res = await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            address: showAddress ? address : undefined,
-            email,
-            phone,
-            message: showMessage ? message : undefined,
-            turnstileToken: token,
-            source: 'website',
-            page: window.location.pathname,
-          }),
-        });
+        let res;
+
+        if (web3formsAccessKey) {
+          // Submit directly to Web3Forms
+          const formData = new FormData();
+          formData.append('access_key', web3formsAccessKey);
+          formData.append('email', email);
+          if (showAddress && address) formData.append('address', address);
+          if (phone) formData.append('phone', phone);
+          if (showMessage && message) formData.append('message', message);
+          formData.append('subject', 'New Form Submission - Solid Properties');
+          formData.append('from_name', 'Website Form');
+
+          res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData,
+          });
+        } else {
+          // Fallback to old internal endpoint (Brevo)
+          res = await fetch('/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              address: showAddress ? address : undefined,
+              email,
+              phone,
+              message: showMessage ? message : undefined,
+              turnstileToken: turnstileToken,
+              source: 'website',
+              page: window.location.pathname,
+            }),
+          });
+        }
 
         if (res.ok) {
           successEl?.classList.remove('hidden');
           form.reset();
           turnstileToken = '';
           if (submitBtn) submitBtn.disabled = true;
-          // @ts-ignore
           if (window.turnstile) window.turnstile.reset();
         } else {
           const data = await res.json().catch(() => ({}));
