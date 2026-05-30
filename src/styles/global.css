@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* ========================================
    Solid Properties — Design Tokens
    Extracted & modernized from Webflow export
