@@ -114,16 +114,7 @@ const {
       </div>
     )}
 
-    <!-- Turnstile Widget -->
-    <div class="pt-2">
-      <div 
-        class="cf-turnstile" 
-        data-sitekey="0x4AAAAAADYjr8h--vYRDUCx"
-        data-callback="onTurnstileSuccess"
-        data-expired-callback="onTurnstileExpired"
-      ></div>
-      <!-- TODO: Replace with your real Cloudflare Turnstile site key -->
-    </div>
+    <!-- Spam protection is handled by Web3Forms -->
 
     <!-- Submit -->
     <button
@@ -154,19 +145,6 @@ const {
 
 <script>
   (function initLeadForm() {
-    // Load Cloudflare Turnstile
-    function loadTurnstile() {
-      if (window.turnstile) return Promise.resolve();
-
-      return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-        script.async = true;
-        script.onload = () => resolve();
-        document.head.appendChild(script);
-      });
-    }
-
     const form = document.getElementById('lead-form');
     if (!form) {
       console.warn('LeadForm: form element not found on this page');
@@ -185,37 +163,7 @@ const {
     const requireMessage = form.dataset.requireMessage === 'true';
     const web3formsAccessKey = form.dataset.web3formsAccessKey || '';
 
-    let turnstileToken = '';
-
-    // Proper Turnstile callbacks (wired via data-callback on the widget)
-    // @ts-ignore
-    window.onTurnstileSuccess = function (token) {
-      turnstileToken = token;
-      if (submitBtn) {
-        submitBtn.disabled = false;
-      }
-    };
-
-    // @ts-ignore
-    window.onTurnstileExpired = function () {
-      turnstileToken = '';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-      }
-    };
-
-    // Fallback: also try to enable button if Turnstile script loads
-    // (in case the widget renders before callbacks are attached)
-    loadTurnstile().then(() => {
-      // Give Turnstile a moment to render
-      setTimeout(() => {
-        const responseInput = document.querySelector('[name="cf-turnstile-response"]');
-        if (responseInput && responseInput.value && submitBtn) {
-          submitBtn.disabled = false;
-          turnstileToken = responseInput.value;
-        }
-      }, 800);
-    });
+    // Spam protection is handled by Web3Forms.
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -245,17 +193,6 @@ const {
         return;
       }
 
-      // If using Web3Forms, we don't need Turnstile validation here
-      if (!web3formsAccessKey) {
-        const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]');
-        const token = turnstileResponse?.value || turnstileToken;
-
-        if (!token) {
-          alert('Please complete the security check.');
-          return;
-        }
-      }
-
       if (submitBtn) {
         submitBtn.disabled = true;
         buttonText?.classList.add('hidden');
@@ -265,46 +202,24 @@ const {
       errorEl?.classList.add('hidden');
 
       try {
-        let res;
+        // Submit directly to Web3Forms
+        const formData = new FormData();
+        formData.append('access_key', web3formsAccessKey);
+        formData.append('email', email);
+        if (showAddress && address) formData.append('address', address);
+        if (phone) formData.append('phone', phone);
+        if (showMessage && message) formData.append('message', message);
+        formData.append('subject', 'New Form Submission - Solid Properties');
+        formData.append('from_name', 'Website Form');
 
-        if (web3formsAccessKey) {
-          // Submit directly to Web3Forms
-          const formData = new FormData();
-          formData.append('access_key', web3formsAccessKey);
-          formData.append('email', email);
-          if (showAddress && address) formData.append('address', address);
-          if (phone) formData.append('phone', phone);
-          if (showMessage && message) formData.append('message', message);
-          formData.append('subject', 'New Form Submission - Solid Properties');
-          formData.append('from_name', 'Website Form');
-
-          res = await fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData,
-          });
-        } else {
-          // Fallback to old internal endpoint (Brevo)
-          res = await fetch('/api/lead', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              address: showAddress ? address : undefined,
-              email,
-              phone,
-              message: showMessage ? message : undefined,
-              turnstileToken: turnstileToken,
-              source: 'website',
-              page: window.location.pathname,
-            }),
-          });
-        }
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+        });
 
         if (res.ok) {
           successEl?.classList.remove('hidden');
           form.reset();
-          turnstileToken = '';
-          if (submitBtn) submitBtn.disabled = true;
-          if (window.turnstile) window.turnstile.reset();
         } else {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.message || 'Submission failed');
